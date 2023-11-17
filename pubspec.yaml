@@ -7,6 +7,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  firebase_core: ^2.22.0
+  cloud_firestore: ^4.13.1
+  firebase_auth: ^4.0.0
+  http: 0.13.6
   auto_size_text: 3.0.0
   cached_network_image: 3.2.1
   flutter_animate: 4.1.1+1
@@ -35,12 +39,9 @@ dependencies:
   url_launcher_ios: 6.1.4
   url_launcher_platform_interface: 2.1.2
 
-
 dev_dependencies:
-
   flutter_test:
     sdk: flutter
 
 flutter:
   uses-material-design: true
-  

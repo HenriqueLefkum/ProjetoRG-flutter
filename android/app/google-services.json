@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "319601638665",
+    "project_id": "siterh-ad136",
+    "storage_bucket": "siterh-ad136.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:319601638665:android:4843ce4f8f9434b879e7d8",
+        "android_client_info": {
+          "package_name": "com.example.ola_mundo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "319601638665-ce94phg25au6mubkt3s50hb6ei08m8d5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu2UOBh1tvwvItBBXPkGlR-VP189yKQcM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "319601638665-ce94phg25au6mubkt3s50hb6ei08m8d5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
