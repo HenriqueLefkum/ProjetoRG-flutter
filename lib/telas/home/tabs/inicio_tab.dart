@@ -1,5 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'anuncio_tab.dart'; // Importe a tela de anúncios
+import 'ponto_tab.dart'; // Importe a tela de ponto
+import 'chamados_tab.dart';
 
 class InicioTab extends StatelessWidget {
   @override
@@ -19,36 +22,23 @@ class InicioTab extends StatelessWidget {
             documentSnapshot.data() as Map<String, dynamic>;
         return usuario;
       } else {
-        throw Exception('Usuario nao encontrado');
+        throw Exception('Usuario não encontrado');
       }
     }
 
-    Future<List<Map<String, dynamic>>> _getAnuncios() async {
-      QuerySnapshot querySnapshot =
-          await _firestore.collection('anuncios').get();
-      List<Map<String, dynamic>> anuncios = querySnapshot.docs
-          .map((doc) => doc.data() as Map<String, dynamic>)
-          .toList();
-
-      return anuncios;
-    }
-
     return FutureBuilder(
-      future: Future.wait([_getData(userID), _getAnuncios()]),
+      future: _getData(userID),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Erro: ${snapshot.error}'));
         } else {
-          List<Map<String, dynamic>> anuncios =
-              snapshot.data![1] as List<Map<String, dynamic>>;
-          Map<String, dynamic> usuario =
-              snapshot.data![0] as Map<String, dynamic>;
+          Map<String, dynamic> usuario = snapshot.data as Map<String, dynamic>;
 
           return SingleChildScrollView(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
                   padding: EdgeInsets.all(16.0),
@@ -62,144 +52,101 @@ class InicioTab extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.0),
-                BaterPontoWidget(),
-                SizedBox(height: 16.0),
-                Container(
-                  color: Color(0xFF99CA9B), // Alterada para a cor #99ca9b
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Anúncios',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      // Use ListView.builder para construir dinamicamente os anúncios
-                      ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: anuncios.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            color: Color(0xFF99CA9B), // Alterada para a cor #99ca9b
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  anuncios[index]['titulo'],
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  anuncios[index]['descricao'],
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Botão para a tela de Anúncios
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AnuncioTab(),
+                            settings: RouteSettings(
+                              arguments: {'userID': args['userID']},
                             ),
-                          );
-                        },
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue, // Cor de fundo do botão
+                        onPrimary: Colors.white, // Cor do texto do botão
+                        minimumSize: Size(150.0, 150.0), // Define o tamanho mínimo
                       ),
-                    ],
-                  ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.message, size: 40),
+                          Text('Anúncios'),
+                        ],
+                      ),
+                    ),
+                    // Botão para a tela de Ponto
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PontoTab(),
+                            settings: RouteSettings(
+                              arguments: {'userID': args['userID']},
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.green, // Cor de fundo do botão
+                        onPrimary: Colors.white, // Cor do texto do botão
+                        minimumSize: Size(150.0, 150.0), // Define o tamanho mínimo
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.access_time, size: 40),
+                          Text('Ponto'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.0), // Adiciona um espaçamento entre as linhas
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    // Botão para a tela de Chamados
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ChamadosTab(),
+                            settings: RouteSettings(
+                              arguments: {'userID': args['userID']},
+                            ),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red, // Cor de fundo do botão
+                        onPrimary: Colors.white, // Cor do texto do botão
+                        minimumSize: Size(150.0, 150.0), // Define o tamanho mínimo
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.call, size: 40),
+                          Text('Chamados'),
+                        ],
+                      ),
+                    ),
+                    // Adicione aqui um segundo botão conforme necessário
+                  ],
                 ),
               ],
             ),
           );
         }
       },
-    );
-  }
-}
-
-class BaterPontoWidget extends StatelessWidget {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  void _baterPonto(BuildContext context) async {
-    final Map<String, dynamic> args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-    String userID = args['userID'];
-    // Obter a data e hora atuais
-    DateTime dataHoraAtual = DateTime.now();
-
-    await _firestore.collection('registros-pontos').add({
-      'DATAHORA': dataHoraAtual,
-      'USERID': userID,
-    });
-
-    // Mostrar um pop-up
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Bater Ponto'),
-          content: Text('Deseja bater o ponto agora em $dataHoraAtual?'),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                // Adicione aqui a lógica para bater o ponto digitalmente
-                // Pode chamar uma função, enviar uma requisição para o servidor, etc.
-                print('Ponto batido em: $dataHoraAtual');
-                Navigator.of(context).pop(); // Fecha o pop-up
-              },
-              child: Text('Sim'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Fecha o pop-up
-              },
-              child: Text('Não'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xFF99CA9B), // Alterada para a cor #99ca9b
-      width: double.infinity,
-      height: 150.0, // Ajuste a altura conforme necessário
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.all(16.0),
-            child: Text(
-              'Bater Ponto',
-              style: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold,
-                color: Colors
-                    .white, // Alterado para branco para melhor legibilidade
-              ),
-            ),
-          ),
-          SizedBox(height: 10.0),
-          Center(
-            // Adicionado Center para centralizar o botão
-            child: ElevatedButton(
-              onPressed: () => _baterPonto(context),
-              child: Text('Bater Ponto'),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
